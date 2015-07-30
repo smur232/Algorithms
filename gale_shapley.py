@@ -7,6 +7,7 @@ class Person:
 def gale_shapley():
     n = int(input())
     instance = 0
+    output = ''
     while n != 0:
         instance += 1
         blue_node_preferences = {}
@@ -45,10 +46,10 @@ def gale_shapley():
 
                 blue_node_preferences[blue_node].queue.remove(unproposed)
                 blue_node_preferences[blue_node].queue.append(unproposed)
-        instance_output = 'Instance ' + str(instance) + ':'
-        print(instance_output)
+        output = output + 'Instance ' + str(instance) + ':\n'
         for blue_node in blue_nodes:
-            print(blue_node_preferences[blue_node].takenTo)
+            output = output + str(blue_node_preferences[blue_node].takenTo) + '\n'
         n = int(input())
+    print(output[:-1])
 
 gale_shapley()
