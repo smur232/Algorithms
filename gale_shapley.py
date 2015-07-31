@@ -5,32 +5,26 @@ class Person:
         self.takenTo = False
 
 def gale_shapley():
-    file = open('input.txt', 'r')
-    outputfile = open('myoutput.txt','w')
-    n = file.readline()
-    n = int(n)
+    n = int(input())
     instance = 0
     output = ''
 
     while n != 0:
         instance += 1
         blue_nodes = [x+1 for x in range(n)]
-        bachelor = blue_nodes.copy()
+        bachelor = [x+1 for x in range(n)]
 
         blue_node_preferences = {}
         pink_node_preferences = {}
         for i in range(n):
-            preference = file.readline().split()
+            preference = input().split()
             preference_list = list(map(int,preference))
             blue_node_preferences[i+1] = Person(preference_list)
 
         for i in range(n):
-            preference = file.readline().split()
+            preference = input().split()
             preference_list = list(map(int,preference))
             pink_node_preferences[i+1] = Person(preference_list)
-
-        # print(blue_node_preferences[0])
-        # print(pink_node_preferences[0])
 
         taken_nodes = set()
 
@@ -55,11 +49,8 @@ def gale_shapley():
         output = output + 'Instance ' + str(instance) + ':\n'
         for blue_node in blue_nodes:
             output = output + str(blue_node_preferences[blue_node].takenTo) + '\n'
-        n = file.readline()
-        n = int(n)
+        n = int(input())
 
-    outputfile.write(output[:-1])
-    outputfile.close()
-    file.close()
+    print(output[:-1])
 
 gale_shapley()
