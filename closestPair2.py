@@ -12,9 +12,9 @@ class City:
 
 
 # remember that for me the x is the long and y is the lat
-def distance(self, other):
-    theta = self.x - other.x
-    dist = math.sin(math.radians(self.y)) * math.sin(math.radians(other.y)) + math.cos(math.radians(self.y)) * math.cos(math.radians(other.y)) * math.cos(math.radians(theta))
+def distance(city1, city2):
+    theta = city1.x - city2.x
+    dist = math.sin(math.radians(city1.y)) * math.sin(math.radians(city2.y)) + math.cos(math.radians(city1.y)) * math.cos(math.radians(city2.y)) * math.cos(math.radians(theta))
     if dist.real > 1:
         dist = 0
     elif dist.real < -1:
@@ -67,10 +67,10 @@ def strip_closest(points, shortest_distance):
             candidate_dist = distance(points[i], points[j])
             if candidate_dist < shortest_distance:
                 found_shorter = True
-                mindist = candidate_dist
+                min_dist = candidate_dist
                 pairs = points[i], points[j]
     if found_shorter:
-        return mindist, pairs
+        return min_dist, pairs
     else:
         return shortest_distance, None
 
@@ -94,26 +94,34 @@ def closest_pair(sorted_by_x, sorted_by_y):
     # points are in the strip if the abs of x - midpoint x is less than delta, it is sorted by y
     # it might be better to use a deque here but for now it is using a list
     strip_by_y = list(filter(lambda point: abs(point.x - x_of_midpoint) < shortest_distance, sorted_by_y))
-    #print(len(strip_by_y))
+
     if len(strip_by_y) > 1:
         shortest_dist_in_strip, pairs = strip_closest(strip_by_y, shortest_distance)
-        if pairs:
+        if shortest_dist_in_strip < shortest_distance :
             shortest_distance = shortest_dist_in_strip
             shortest_pair = pairs
 
     return shortest_pair[0], shortest_pair[1], shortest_distance
 
 
-file = open('mytest.txt', 'r')
-n = file.readline()
+n = input()
 n = int(n)
 scenario = 1
 while n != 0:
     points = []
     for _ in range(n):
-            city, latitude, longitude = file.readline().split()
-            # passing longitude as the x and lat as the y!!
-            points.append(City(city, float(longitude), float(latitude)))
+
+        my_input = input().split()
+        if len(my_input) == 3:
+            city = my_input[0]
+            latitude = my_input[1]
+            longitude = my_input[2]
+        if len(my_input) == 4:
+            city = my_input[0] + ' ' + my_input[1]
+            latitude = my_input[2]
+            longitude = my_input[3]
+        # passing longitude as the x and lat as the y!!
+        points.append(City(city, float(longitude), float(latitude)))
     sorted_by_x = sorted(points, key=lambda point: point.x)
     sorted_by_y = sorted(points, key=lambda point: point.y)
 
@@ -124,7 +132,6 @@ while n != 0:
     print('Scenario ' + str(scenario) + ':')
     print('Closest pair: ' + city1.name + ' ' + city2.name)
     print('Distance: ' + str(round(dist,1)))
-    n = file.readline()
+    n = input()
     n = int(n)
     scenario += 1
-file.close()
